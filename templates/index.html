@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Breast Cancer Prediction</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+        background-color: #f9f9f9;
+      }
+      .form-container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      .accordion {
+        margin: 15px 0;
+      }
+      .accordion button {
+        width: 100%;
+        background: #4caf50;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        text-align: left;
+        font-size: 1.1em;
+        cursor: pointer;
+        margin-bottom: 5px;
+      }
+      .accordion button:hover {
+        background: #45a049;
+      }
+      .accordion-content {
+        display: none;
+        padding: 15px;
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+      label {
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+      input {
+        width: 100%;
+        padding: 6px;
+        margin-top: 4px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        font-size: 1em;
+        padding: 12px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+      .result {
+        font-size: 1.3em;
+        text-align: center;
+        margin-top: 20px;
+        font-weight: bold;
+      }
+      .benign {
+        color: green;
+      }
+      .malignant {
+        color: red;
+      }
+    </style>
+    <script>
+      // Toggle accordion sections
+      function toggleAccordion(id) {
+        var section = document.getElementById(id);
+        section.style.display =
+          section.style.display === "block" ? "none" : "block";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Breast Cancer Prediction</h2>
+      <form action="/predict" method="post">
+        <!-- Mean Features -->
+        <div class="accordion">
+          <button type="button" onclick="toggleAccordion('mean')">
+            📊 Mean Features
+          </button>
+          <div id="mean" class="accordion-content">
+            <div class="grid">
+              <div>
+                <label>Mean Radius</label
+                ><input type="number" step="0.01" name="mean_radius" required />
+              </div>
+              <div>
+                <label>Mean Texture</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_texture"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Perimeter</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_perimeter"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Area</label
+                ><input type="number" step="0.01" name="mean_area" required />
+              </div>
+              <div>
+                <label>Mean Smoothness</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_smoothness"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Compactness</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_compactness"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Concavity</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_concavity"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Concave Points</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_concave_points"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Symmetry</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_symmetry"
+                  required
+                />
+              </div>
+              <div>
+                <label>Mean Fractal Dimension</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="mean_fractal_dimension"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SE Features -->
+        <div class="accordion">
+          <button type="button" onclick="toggleAccordion('se')">
+            📉 Standard Error Features
+          </button>
+          <div id="se" class="accordion-content">
+            <div class="grid">
+              <div>
+                <label>Radius SE</label
+                ><input type="number" step="0.01" name="radius_se" required />
+              </div>
+              <div>
+                <label>Texture SE</label
+                ><input type="number" step="0.01" name="texture_se" required />
+              </div>
+              <div>
+                <label>Perimeter SE</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="perimeter_se"
+                  required
+                />
+              </div>
+              <div>
+                <label>Area SE</label
+                ><input type="number" step="0.01" name="area_se" required />
+              </div>
+              <div>
+                <label>Smoothness SE</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="smoothness_se"
+                  required
+                />
+              </div>
+              <div>
+                <label>Compactness SE</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="compactness_se"
+                  required
+                />
+              </div>
+              <div>
+                <label>Concavity SE</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="concavity_se"
+                  required
+                />
+              </div>
+              <div>
+                <label>Concave Points SE</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="concave_points_se"
+                  required
+                />
+              </div>
+              <div>
+                <label>Symmetry SE</label
+                ><input type="number" step="0.01" name="symmetry_se" required />
+              </div>
+              <div>
+                <label>Fractal Dimension SE</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="fractal_dimension_se"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Worst Features -->
+        <div class="accordion">
+          <button type="button" onclick="toggleAccordion('worst')">
+            ⚠️ Worst Features
+          </button>
+          <div id="worst" class="accordion-content">
+            <div class="grid">
+              <div>
+                <label>Worst Radius</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_radius"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Texture</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_texture"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Perimeter</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_perimeter"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Area</label
+                ><input type="number" step="0.01" name="worst_area" required />
+              </div>
+              <div>
+                <label>Worst Smoothness</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_smoothness"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Compactness</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_compactness"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Concavity</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_concavity"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Concave Points</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_concave_points"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Symmetry</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_symmetry"
+                  required
+                />
+              </div>
+              <div>
+                <label>Worst Fractal Dimension</label
+                ><input
+                  type="number"
+                  step="0.01"
+                  name="worst_fractal_dimension"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <input type="submit" value="Predict" />
+      </form>
+
+      {% if prediction_text %}
+      <div
+        class="result {{'benign' if 'BENIGN' in prediction_text else 'malignant'}}"
+      >
+        {{ prediction_text }}
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
